@@ -33,3 +33,13 @@ function addID(element, _id) {
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
+
+// get the clicked position
+function getClickedPosition (coordinates){
+  const clickedPosition = coordinates
+          .replace(/[^0-9]/g, "-")
+          .split("-");
+        const clickedRow = parseInt(clickedPosition[1]),
+          clickedCol = parseInt(clickedPosition[2]);
+    return [clickedRow, clickedCol]
+}

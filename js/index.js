@@ -1,30 +1,53 @@
-function itsabomb() {
-  const numOfSquares = 25;
+function start(){
+    document.querySelector('.start').addEventListener('click', () =>{
+        let numOfSquares;
+        if (document.querySelector('select').selectedIndex === 1){
+         numOfSquares = 49;
+        } else if (document.querySelector('select').selectedIndex === 2){
+         numOfSquares = 100;
+        } else {
+         numOfSquares = 25;
+        }
+        document.querySelector('.selectOptions').classList.toggle('d-none');
+        document.querySelector('.game').classList.toggle('d-none');
+        itsabomb(numOfSquares);
+     });
+}
+
+start();
+
+
+function itsabomb(level) {
+    let numOfSquares = level;
+/* fixed the width of the wrapper according to the grid dimensions */
+const property = document.documentElement;
+let squareDimension = 25;
+// check the windows width
+function resizeSquare() {
+  if (window.innerWidth <= 600 && numOfSquares > 25) {
+    squareDimension = 40;
+  } else {
+    squareDimension = 50;
+  }
+  property.style.setProperty(
+    "--wrapper-width",
+    `${sqrtSquares * squareDimension}px`
+  );
+  property.style.setProperty("--square-width", `${squareDimension}px`);
+}
+window.onresize = resizeSquare;
+// end of width replacemente
+    let win = false;
+  
   // if the grid is 10x10 limit the bomb number to 16
   const numOfBombs =
     (numOfSquares === 100 && 16) || Math.floor((numOfSquares / 100) * 20) - 1;
+    const bombsToFind = document.getElementById('bombsToFind');
+    bombsToFind.innerHTML = numOfBombs;
   // define a constant we'll use later
   const sqrtSquares = Math.sqrt(numOfSquares);
 
-  /* fixed the width of the wrapper according to the grid dimensions */
-  const property = document.documentElement;
-  let squareDimension = 25;
-  // check the windows width
-  function resizeSquare() {
-    if (window.innerWidth <= 600 && numOfSquares > 25) {
-      console.log(window.innerWidth);
-      squareDimension = 40;
-    } else {
-      squareDimension = 50;
-    }
-    property.style.setProperty(
-      "--wrapper-width",
-      `${sqrtSquares * squareDimension}px`
-    );
-    property.style.setProperty("--square-width", `${squareDimension}px`);
-  }
-  window.onresize = resizeSquare;
-  // end of width replacemente
+  
 
   // create the playground
   document.querySelector(".wrapper").innerHTML = "";
@@ -33,9 +56,14 @@ function itsabomb() {
         // every square has a unique ID, corresponding to its position on the grid
       document
         .querySelector(".wrapper")
-        .append(createChild("div", `m${i + 1}n${j + 1}`, ["square"], ""));
+        .append(createChild("div", `m${i + 1}n${j + 1}`, ["square", "position-relative"], ""));
     }
   }
+  // fix the outer square border radius
+  document.getElementById(`m1n1`).classList.add('squareTopLeft')
+  document.getElementById(`m1n${sqrtSquares}`).classList.add('squareTopRight')
+  document.getElementById(`m${sqrtSquares}n${sqrtSquares}`).classList.add('squareBottomRight')
+  document.getElementById(`m${sqrtSquares}n1`).classList.add('squareBottomLeft')
   /* get all the squares in the playground */
   const squares = document.querySelectorAll(".square");
 
@@ -54,7 +82,11 @@ function itsabomb() {
     squares[i].addEventListener("click", () => {
       if (bombs.indexOf(squares[i].id) >= 0) {
         /* END OF THE GAME */
+        squares[i].classList.remove("marked");
+        squares[i].classList.remove("safe");
         squares[i].classList.add("boom");
+        squares[i].innerHTML = '💣';
+
       } else {
         /* YOU'RE SAFE, YOU CAN CONTINUE THE GAME */
         /* GET CLICKED SQUARE POSITION ON THE GRID */
@@ -113,6 +145,8 @@ function itsabomb() {
 
           if (aroundBombs === 0) {
             document.getElementById(`m${row}n${col}`).classList.add("safe");
+            document.getElementById(`m${row}n${col}`).classList.remove("marked");
+            document.getElementById(`m${row}n${col}`).innerHTML = ' ';
             // if the square is safe check all the other positions and reveal them until they're 0 too
             safeSpot.forEach((spot) => {
               const newRow = spot[0];
@@ -128,7 +162,8 @@ function itsabomb() {
             });
           } else {
             //other wise stop the checking
-            document.getElementById(`m${row}n${col}`).classList.add("yellow");
+            document.getElementById(`m${row}n${col}`).classList.remove("marked");
+            document.getElementById(`m${row}n${col}`).classList.add("aroundNotSafe");
             document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
           }
         }
@@ -138,7 +173,44 @@ function itsabomb() {
     });
   }
 
+/* MARK THE BOMB POSITION */
+  let bombsFound = [];
+  for (let i = 0; i < squares.length; i++) {
+   
+    squares[i].addEventListener(
+      "contextmenu",
+      (event) => {
+        event.preventDefault();
+         
+        if (!squares[i].innerHTML){
+            squares[i].classList.add('marked');
+            bombsFound.push(
+              squares[i].id)
+            ;
+        }
+
+            
+        
+        bombsToFind.innerHTML = numOfBombs - bombsFound.length;
+        let discovered = 0;
+        for (i = 0; i < bombs.length; i++) {
+          if (bombsFound.length === bombs.length) {
+            if (bombs.includes(bombsFound[i])) {
+              discovered++;
+            }
+          }
+          if (discovered === bombs.length) {
+            win=true;
+          }
+        }
+        return false;
+      },
+      false
+    );
+  }
+  
+  
   
 }
 
-itsabomb();
+

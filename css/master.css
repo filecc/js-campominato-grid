@@ -14,7 +14,9 @@
     color: black;
     background-color: white;
   }
-  
+  button{
+    cursor: pointer;
+  }
   main {
     width: 100%;
     height: 100vh;
@@ -24,9 +26,12 @@
     justify-content: center;
     align-items: center;
   }
-  
+
   .wrapper {
-    width: var(--wrapper-width);
+    width: calc(var(--wrapper-width) + 10px);
+    padding: 5px;
+    background-color: #eee;
+    border-radius: 10px;
     margin: 5% auto;
     display: flex;
     flex-wrap: wrap;
@@ -35,22 +40,58 @@
   }
   
   .square {
+    font-family: 'Bangers', cursive;
     width: var(--square-width);
     height: var(--square-width);
-    border: 1px solid black;
+    border: 1px dashed rgb(100, 99, 99);
+    background-color: #f2e7e7;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    cursor: crosshair;
   }
+
+  .squareTopLeft{
+    border-top-left-radius: 10px;
+  }
+  .squareTopRight{
+    border-top-right-radius: 10px;
+  }
+  .squareBottomRight{
+    border-bottom-right-radius: 10px;
+  }
+  .squareBottomLeft{
+    border-bottom-left-radius: 10px;
+  }
+
   
   .boom {
     background-color: red;
+    text-align: center;
+    font-size: 1.5rem;
   }
   .safe {
-    background-color: aquamarine;
+    border: none;
+   background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Grass_Texture.png/1200px-Grass_Texture.png?20160331002702');
+   background-repeat: no-repeat;
+   background-size: contain;
   }
   
-  .yellow{
-    background-color: yellow;
+  .aroundNotSafe{
+    background-color: rgb(190, 183, 183);
+  }
+  .marked{
+    background-color: #f9dede;
+  }
+  .marked:after{
+    content: '🚩';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
   }
