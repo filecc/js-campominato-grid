@@ -1,16 +1,31 @@
 function start(){
+    const property = document.documentElement;
     document.querySelector('.start').addEventListener('click', () =>{
-        let numOfSquares;
+        let numOfSquares = 25;
         if (document.querySelector('select').selectedIndex === 1){
          numOfSquares = 49;
+
         } else if (document.querySelector('select').selectedIndex === 2){
          numOfSquares = 100;
         } else {
          numOfSquares = 25;
         }
+
+        property.style.setProperty(
+            "--wrapper-width",
+            `${Math.sqrt(numOfSquares) * 50}px`
+          );
+        if (window.innerWidth < 600 && numOfSquares > 25){
+            property.style.setProperty(
+                "--wrapper-width",
+                `${Math.sqrt(numOfSquares) * 35}px`
+              );
+            property.style.setProperty("--square-width", `35px`);
+        }
         document.querySelector('.selectOptions').classList.toggle('d-none');
         document.querySelector('.game').classList.toggle('d-none');
         itsabomb(numOfSquares);
+
      });
 }
 
@@ -18,7 +33,8 @@ start();
 
 
 function itsabomb(level) {
-    let numOfSquares = level;
+    
+let numOfSquares = level;
 /* fixed the width of the wrapper according to the grid dimensions */
 const property = document.documentElement;
 let squareDimension = 25;
@@ -35,7 +51,9 @@ function resizeSquare() {
   );
   property.style.setProperty("--square-width", `${squareDimension}px`);
 }
+
 window.onresize = resizeSquare;
+
 // end of width replacemente
     let win = false;
   
@@ -50,15 +68,15 @@ window.onresize = resizeSquare;
   
 
   // create the playground
-  document.querySelector(".wrapper").innerHTML = "";
+  const wrapper = document.querySelector(".wrapper");
+  wrapper.innerHTML = "";
   for (let i = 0; i < sqrtSquares; i++) {
     for (let j = 0; j < sqrtSquares; j++) {
         // every square has a unique ID, corresponding to its position on the grid
-      document
-        .querySelector(".wrapper")
-        .append(createChild("div", `m${i + 1}n${j + 1}`, ["square", "position-relative"], ""));
+        wrapper.append(createChild("div", `m${i + 1}n${j + 1}`, ["square", "position-relative"], ""));
     }
   }
+  document.querySelector('#gameHeader').append(createChild('button', 'checkWinner', ['btn','btn-warning'], 'Check'));
   // fix the outer square border radius
   document.getElementById(`m1n1`).classList.add('squareTopLeft')
   document.getElementById(`m1n${sqrtSquares}`).classList.add('squareTopRight')
@@ -142,7 +160,7 @@ window.onresize = resizeSquare;
               }
             }
           });
-
+          
           if (aroundBombs === 0) {
             document.getElementById(`m${row}n${col}`).classList.add("safe");
             document.getElementById(`m${row}n${col}`).classList.remove("marked");
@@ -162,7 +180,9 @@ window.onresize = resizeSquare;
             });
           } else {
             //other wise stop the checking
+            /* const checked = document.getElementById(`m${row}n${col}`); */
             document.getElementById(`m${row}n${col}`).classList.remove("marked");
+            discovered++;
             document.getElementById(`m${row}n${col}`).classList.add("aroundNotSafe");
             document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
           }
@@ -175,40 +195,50 @@ window.onresize = resizeSquare;
 
 /* MARK THE BOMB POSITION */
   let bombsFound = [];
+  let discovered = 0;
+
   for (let i = 0; i < squares.length; i++) {
    
     squares[i].addEventListener(
       "contextmenu",
       (event) => {
         event.preventDefault();
-         
-        if (!squares[i].innerHTML){
+        
+        //add the mark if the square is empty and is not already marked
+        if (!squares[i].innerHTML && !squares[i].classList.contains('marked') ){
             squares[i].classList.add('marked');
             bombsFound.push(
               squares[i].id)
             ;
+            discovered++;
+            btnCheckDisabled();
+        } else {
+            squares[i].classList.remove('marked');
+            bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
+            discovered--;
+            btnCheckDisabled();
         }
-
-            
         
-        bombsToFind.innerHTML = numOfBombs - bombsFound.length;
-        let discovered = 0;
-        for (i = 0; i < bombs.length; i++) {
-          if (bombsFound.length === bombs.length) {
-            if (bombs.includes(bombsFound[i])) {
-              discovered++;
-            }
-          }
-          if (discovered === bombs.length) {
-            win=true;
-          }
-        }
+        // update the remaining bombs according to the user
+        document.getElementById('bombsToFind').innerHTML = numOfBombs - bombsFound.length;
+
         return false;
       },
       false
     );
+    
   }
-  
+
+  const btnCheck = document.getElementById('checkWinner');
+  btnCheck.disabled = true;
+  /* update the state of the button for check if the user wins or not, after guessing at least the same amount of bombs */
+  function btnCheckDisabled(){
+    if (bombsFound.length >= numOfBombs){
+      btnCheck.disabled = false;
+    } else {
+      btnCheck.disabled = true;
+    }
+  }
   
   
 }

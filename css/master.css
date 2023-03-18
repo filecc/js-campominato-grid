@@ -25,6 +25,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background:  url('../img/grass.png'), linear-gradient(#6491d0, #bbe5f4);
+    background-size: cover;
+   
+    
+  }
+  #gameHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: var(--wrapper-width);
+    margin: 1rem auto;
   }
 
   .wrapper {
@@ -38,12 +49,12 @@
     justify-content: center;
     transition: all .5s;
   }
-  
+ 
   .square {
     font-family: 'Bangers', cursive;
     width: var(--square-width);
     height: var(--square-width);
-    border: 1px dashed rgb(100, 99, 99);
+    border: 1px dashed #9EB06E;
     background-color: #f2e7e7;
     display: flex;
     justify-content: center;
@@ -52,36 +63,36 @@
   }
 
   .squareTopLeft{
-    border-top-left-radius: 10px;
+    border-top-left-radius: 5px;
   }
   .squareTopRight{
-    border-top-right-radius: 10px;
+    border-top-right-radius: 5px;
   }
   .squareBottomRight{
-    border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 5px;
   }
   .squareBottomLeft{
-    border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 5px;
   }
 
   
   .boom {
-    background-color: red;
+    background-color: #B9545D;
     text-align: center;
     font-size: 1.5rem;
   }
   .safe {
     border: none;
-   background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Grass_Texture.png/1200px-Grass_Texture.png?20160331002702');
+   background-image: url('../img/pattern-grass.jpg');
    background-repeat: no-repeat;
-   background-size: contain;
+   background-size: 250%;
   }
   
   .aroundNotSafe{
-    background-color: rgb(190, 183, 183);
+    background-color: #D3DBBE;
   }
   .marked{
-    background-color: #f9dede;
+    background-color: #ECE99A;
   }
   .marked:after{
     content: '🚩';
