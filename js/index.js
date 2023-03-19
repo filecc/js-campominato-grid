@@ -112,7 +112,6 @@ function itsabomb(level) {
       markBtn.textContent = "🚩";
       markBtn.classList.toggle("btn-success");
     }
-    console.log(markMode);
   });
   /*  CHECK IF WE CLICK A BOMB */
 
@@ -219,7 +218,6 @@ function itsabomb(level) {
                     }
                     document.getElementById("bombsToFind").innerHTML =
                       numOfBombs - bombsFound.length;
-                      console.log(bombsFound)
                     // if the square is safe check all the other positions and reveal them until they're 0 too
                     safeSpot.forEach((spot) => {
                       const newRow = spot[0];
@@ -270,20 +268,17 @@ function itsabomb(level) {
           squares[i].classList.add("marked");
           bombsFound.push(squares[i].id);
           btnCheckDisabled();
-          console.log(bombsFound)
         } else {
           squares[i].classList.remove("marked");
-          if(bombsFound.includes(`m${row}n${col}`)){
-            bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+          if(bombsFound.includes(squares[i].id)){
+            bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
         }
           btnCheckDisabled();
-          console.log(bombsFound)
         }
 
         // update the remaining bombs according to the user
         document.getElementById("bombsToFind").innerHTML =
           numOfBombs - bombsFound.length;
-          console.log(bombsFound)
         return false;
       },
       false
@@ -304,29 +299,36 @@ function itsabomb(level) {
 
   let checkPassed = 0;
   btnCheck.addEventListener('click', ()=>{
-    if(numOfBombs === bombsFound.length){
-       for(let i=0;i<bombsFound.length;i++){
-        if(bombs.includes(bombsFound[i])){
-            checkPassed++;
-        }
-       }
-    }
-    if (checkPassed === numOfBombs){
-        console.log('Hai vinto!')
-        celebrate();
-        theyWin();
-        
-        btnContainer.innerHTML = '';
-                btnContainer.style.justifyContent = 'center';
-                btnContainer.append(createChild('a', 'replay', ['btn', 'btn-danger'], 'Replay'));
-                const replay = document.getElementById('replay');
-                replay.setAttribute('href', './index.html');
-                document.querySelector('#gameHeader h2').style.display = 'none';
+    checkPassed = 0;
+    btnCheck.classList.toggle('tryAgain');
+    setTimeout(checkNow, 100);
 
-
-    } else {
-        console.log('Ritenta')
+    function checkNow(){
+        if(numOfBombs === bombsFound.length){
+            for(let i=0;i<bombsFound.length;i++){
+             if(bombs.includes(bombsFound[i])){
+                 checkPassed++;
+             }
+            }
+         }
+         if (checkPassed === numOfBombs){
+             btnCheck.classList.remove('tryAgain');
+             celebrate();
+             theyWin();
+             
+             btnContainer.innerHTML = '';
+                     btnContainer.style.justifyContent = 'center';
+                     btnContainer.append(createChild('a', 'replay', ['btn', 'btn-danger'], 'Replay'));
+                     const replay = document.getElementById('replay');
+                     replay.setAttribute('href', './index.html');
+                     document.querySelector('#gameHeader h2').style.display = 'none';
+     
+     
+         } else {
+             btnCheck.classList.add('tryAgain');
+         }
     }
+    
   })
 
 
@@ -363,6 +365,4 @@ function theyWin(){
     })
     
 }
-
-console.log(bombs)
 }

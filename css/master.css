@@ -242,7 +242,25 @@
      align-items: center;
      font-size: 1.5rem;
  }
+.tryAgain{
+    animation: linear .1s 5 backwards slidein;
+}
 
+@keyframes slidein {
+    0% {
+       transform: rotate(5deg);
+       background-color: rgb(233, 57, 57);
+    }
+
+    50% {
+        transform: rotate(0);
+        background-color: rgb(235, 42, 42);
+    }
+    100% {
+        transform: rotate(-5deg);
+        background-color: rgb(235, 42, 42);
+    }
+}
  .flower {
     background-color: #ECE99A;
    
