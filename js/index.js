@@ -73,7 +73,7 @@ window.onresize = resizeSquare;
   for (let i = 0; i < sqrtSquares; i++) {
     for (let j = 0; j < sqrtSquares; j++) {
         // every square has a unique ID, corresponding to its position on the grid
-        wrapper.append(createChild("div", `m${i + 1}n${j + 1}`, ["square", "position-relative"], ""));
+        wrapper.append(createChild("div", `m${i + 1}n${j + 1}`, ["square"], ""));
     }
   }
   document.querySelector('#gameHeader').append(createChild('button', 'checkWinner', ['btn','btn-warning'], 'Check'));

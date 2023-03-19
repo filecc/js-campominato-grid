@@ -20,9 +20,10 @@ function createChild(tagName, id, classes, text) {
 /* Adds the specified classes to the given HTML element */
 function addClasses(element, classes) {
   for (const _class of classes) {
-    element.classList.toggle(_class);
+    element.classList.add(_class);
   }
 }
+
 
 /* Adds the specified ID to the given HTML element */
 function addID(element, _id) {
@@ -43,3 +44,5 @@ function getClickedPosition (coordinates){
           clickedCol = parseInt(clickedPosition[2]);
     return [clickedRow, clickedCol]
 }
+
+
