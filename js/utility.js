@@ -17,10 +17,17 @@ function createChild(tagName, id, classes, text) {
   return newElement;
 }
 
-/* Adds the specified classes to the given HTML element */
+/* Add the specified classes to the given HTML element */
 function addClasses(element, classes) {
   for (const _class of classes) {
     element.classList.add(_class);
+  }
+}
+
+/* Remove the specified classes to the given HTML element */
+function removeClasses(element, classes) {
+  for (const _class of classes) {
+    element.classList.remove(_class);
   }
 }
 
@@ -45,4 +52,33 @@ function getClickedPosition (coordinates){
     return [clickedRow, clickedCol]
 }
 
+// celebrations!!
+
+function celebrate(){
+  confetti({
+    particleCount: 200,
+    angle: 60,
+    spread: 80,
+    origin: { x: 0, y: 1 }
+  });
+  // and launch a few from the right edge
+  confetti({
+    particleCount: 200,
+    angle: 120,
+    spread: 80,
+    origin: { x: 1, y: 1 }
+  });
+  confetti({
+    particleCount: 200,
+    angle: 60,
+    spread: 80,
+    origin: { x: 0, y: 0 }
+  });
+  confetti({
+    particleCount: 200,
+    angle: 120,
+    spread: 80,
+    origin: { x: 1, y: 0 }
+  });
+}
 

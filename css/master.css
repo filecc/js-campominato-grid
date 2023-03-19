@@ -1,208 +1,255 @@
  * {
-    box-sizing: border-box;
-  }
-  
-  :root {
-    --wrapper-width: 250px;
-    --square-width: 50px;
-    --app-height: 100vh;
-  }
-  
-  body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    color: black;
-    background-color: white;
-  }
-  button{
-    cursor: pointer;
-  }
+     box-sizing: border-box;
+ }
 
-  main {
-    width: 100%;
-    height: 100vh;
-    height: var(--app-height);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background:  url('../img/grass.png'), linear-gradient(#6491d0, #bbe5f4);
-    background-position: bottom;
-    background-size: cover;
-    position: relative;
-    transition: all 1s;
-  }
-  main.dark{
-    background:  url('../img/grass.png'), linear-gradient(#021a3c, #053982);
-    background-position: bottom;
-    background-size: cover;
-    transition: all 1s;
-  }
-  #sun-or-moon{
-    width: 90%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: flex-start;
-    z-index: 0;
-    transition: all 1s;
-  }
-  .sunImg, .moonImg {
-    position: relative;
-    max-height: 200px;
-    left: 5%;
-    object-fit: contain;
-    transition: all 1s;
-  }
-  .moonImg{
-    max-height: 150px;
-    margin-left: -150px;
-    top: 20px;
-    left: 250%;
-  }
- 
-  .moveApart{
-   animation-name: nightSwitcher;
-   animation-duration: 1s;
-   animation-iteration-count: 1;
-   animation-fill-mode: forwards;
-  }
-  .takeBack{
-    animation-name: takeBack;
-   animation-duration: 1s;
-   animation-iteration-count: 1;
-   animation-fill-mode: forwards;
-  }
+ :root {
+     --wrapper-width: 250px;
+     --square-width: 50px;
+     --app-height: 100vh;
+ }
 
-  @keyframes nightSwitcher {
-    0%{
-        left: 0;
-    }
-    100%{
-        left: 250%;
-    }
-    
-  }
+ body {
+     margin: 0;
+     font-family: system-ui, sans-serif;
+     color: black;
+     background-color: white;
+ }
 
-  @keyframes takeBack {
-    0%{
-        left: -250%;
-    }
-    100%{
-        left: 5%;
-    }
-  }
+ button {
+     cursor: pointer;
+ }
 
-  @media screen and (min-width: 1000px) {
-    #sun-or-moon{
-        top: 5%;
-        left: -3%;
-      }
-      #sun-or-moon img{
-        max-height: 250px;
-      }
-    
-  }
+ main {
+     width: 100%;
+     height: 100vh;
+     height: var(--app-height);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     background: url('../img/grass.png'), linear-gradient(#6491d0, #bbe5f4);
+     background-position: bottom;
+     background-size: cover;
+     position: relative;
+     transition: all 1s;
+ }
 
-  @media screen and (max-width: 500px) {
-    #sun-or-moon{
-        top: 3px;
-        left: -3%;
-      }
-    main{
-        background-size: contain;
-        background-repeat: no-repeat;
-    }
-  }
-  #gameHeader{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: stretch;
-    align-items: center;
-    width: calc(var(--wrapper-width) + 10px);
-    gap: 1rem;
-  }
-  .btnContainer{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  h2{
-    margin-bottom: 0;
-  }
-  .light{
-    color: white;
-  }
-  .game{
-    z-index: 2000;
-  }
+ main.dark {
+     background: url('../img/grass.png'), linear-gradient(#021a3c, #053982);
+     background-position: bottom;
+     background-size: cover;
+     transition: all 1s;
+ }
 
-  .wrapper {
-    width: calc(var(--wrapper-width) + 10px);
-    padding: 5px;
-    background-color: #eee;
-    border-radius: 10px;
-    margin: 5% auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    transition: all .5s;
-  }
- 
-  .square {
-    position: relative;
-    font-family: 'Bangers', cursive;
-    width: var(--square-width);
-    height: var(--square-width);
-    border: 1px dashed #9EB06E;
-    background-color: #f2e7e7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: crosshair;
-    transition: all 0.2s;
-  }
+ #sun-or-moon {
+     width: 90%;
+     position: absolute;
+     top: 0;
+     left: 0;
+     display: flex;
+     justify-content: flex-start;
+     z-index: 0;
+     transition: all 1s;
+ }
 
-  .squareTopLeft{
-    border-top-left-radius: 5px;
-  }
-  .squareTopRight{
-    border-top-right-radius: 5px;
-  }
-  .squareBottomRight{
-    border-bottom-right-radius: 5px;
-  }
-  .squareBottomLeft{
-    border-bottom-left-radius: 5px;
-  }
+ .sunImg,
+ .moonImg {
+     position: relative;
+     max-height: 200px;
+     left: 5%;
+     object-fit: contain;
+     transition: all 1s;
+ }
 
-  
-  .boom {
-    background-color: #B9545D;
-    text-align: center;
-    font-size: 1.5rem;
-  }
-  .destroy{
-    width: ;
-  }
-  .safe {
-    border: none;
-   background-image: url('../img/pattern-grass.jpg');
-   background-repeat: no-repeat;
-   background-size: 250%;
-  }
-  
-  .aroundNotSafe{
-    background-color: #D3DBBE;
-  }
-  .marked{
+ .moonImg {
+     max-height: 150px;
+     margin-left: -150px;
+     top: 20px;
+     left: 250%;
+ }
+
+ .moveApart {
+     animation-name: nightSwitcher;
+     animation-duration: 1s;
+     animation-iteration-count: 1;
+     animation-fill-mode: forwards;
+ }
+
+ .takeBack {
+     animation-name: takeBack;
+     animation-duration: 1s;
+     animation-iteration-count: 1;
+     animation-fill-mode: forwards;
+ }
+
+ @keyframes nightSwitcher {
+     0% {
+         left: 0;
+     }
+
+     100% {
+         left: 250%;
+     }
+
+ }
+
+ @keyframes takeBack {
+     0% {
+         left: -250%;
+     }
+
+     100% {
+         left: 5%;
+     }
+ }
+
+ @media screen and (min-width: 1000px) {
+     #sun-or-moon {
+         top: 5%;
+         left: -3%;
+     }
+
+     #sun-or-moon img {
+         max-height: 250px;
+     }
+
+ }
+
+ @media screen and (max-width: 500px) {
+     #sun-or-moon {
+         top: 3px;
+         left: -3%;
+     }
+
+     main {
+         background-size: contain;
+         background-repeat: no-repeat;
+     }
+ }
+
+ #gameHeader {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: stretch;
+     align-items: center;
+     width: calc(var(--wrapper-width) + 10px);
+     gap: 1rem;
+ }
+
+ .btnContainer {
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ h2 {
+     margin-bottom: 0;
+ }
+
+ .light {
+     color: white;
+ }
+
+ .game {
+     z-index: 2000;
+ }
+
+ .wrapper {
+     width: calc(var(--wrapper-width) + 10px);
+     padding: 5px;
+     background-color: #eee;
+     border-radius: 10px;
+     margin: 5% auto;
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: center;
+     transition: all .5s;
+ }
+
+ .square {
+     position: relative;
+     font-family: 'Bangers', cursive;
+     width: var(--square-width);
+     height: var(--square-width);
+     border: 1px dashed #9EB06E;
+     background-color: #f2e7e7;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     cursor: crosshair;
+     transition: all 0.2s;
+ }
+
+ .squareTopLeft {
+     border-top-left-radius: 5px;
+ }
+
+ .squareTopRight {
+     border-top-right-radius: 5px;
+ }
+
+ .squareBottomRight {
+     border-bottom-right-radius: 5px;
+ }
+
+ .squareBottomLeft {
+     border-bottom-left-radius: 5px;
+ }
+
+
+ .boom {
+     background-color: #B9545D;
+     text-align: center;
+     color: white;
+     font-size: 1.5rem;
+     transition: all .2s;
+ }
+
+ .boom.destroy {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     z-index: 3000;
+ }
+
+ .safe {
+     border: none;
+     background-image: url('../img/pattern-grass.jpg');
+     background-repeat: no-repeat;
+     background-size: 250%;
+ }
+
+ .aroundNotSafe {
+     background-color: #D3DBBE;
+ }
+
+ .marked {
+     background-color: #ECE99A;
+ }
+
+ .marked:after {
+     content: '🚩';
+     width: 100%;
+     height: 100%;
+     position: absolute;
+     top: 0;
+     left: 0;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     font-size: 1.5rem;
+ }
+
+ .flower {
     background-color: #ECE99A;
-  }
-  .marked:after{
-    content: '🚩';
+   
+}
+
+.flower:after {
+    content: '🌸';
     width: 100%;
     height: 100%;
     position: absolute;
@@ -211,58 +258,72 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
-  }
+    font-size: 1px;
+    animation-name: flowers;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
 
+@keyframes flowers {
+    0%{
+       font-size: 1px;
+    }
+    100%{
+       font-size: 1.8rem;
+    }
+}
 
-  /* DARK MODE */
-   /* DARK MODE */
-   #toggleContainer{
-    position: absolute;
-    right: 5%;
-    top: 2%;
-  }
+ /* DARK MODE */
+ /* DARK MODE */
+ #toggleContainer {
+     position: absolute;
+     right: 5%;
+     top: 2%;
+ }
 
-  #switch{
-    background-color: #bbb;
-    padding: 1rem 1.75rem;
-    border-radius: 5px;
-    position: relative;
-  }
+ #switch {
+     background-color: #bbb;
+     padding: 1rem 1.75rem;
+     border-radius: 5px;
+     position: relative;
+ }
 
-  #switch button {
-    background-color: none;
-    border: none;
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-    padding: .08rem;
-    margin: 0 .1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all .5s;
-    color: inherit;
-  }
+ #switch button {
+     background-color: none;
+     border: none;
+     position: absolute;
+     top: 50%;
+     transform: translate(0, -50%);
+     padding: .08rem;
+     margin: 0 .1rem;
+     border-radius: 5px;
+     cursor: pointer;
+     transition: all .5s;
+     color: inherit;
+ }
 
-  .sun{
-    background-color: #f9e262;
-    right: 0;
-    left: 50%;
-  }
-  .sun:after{
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f185";
-  }
+ .sun {
+     background-color: #f9e262;
+     right: 0;
+     left: 50%;
+ }
 
-  .moon{
-    background-color: #eee;
-    left: 0;
-    right: 50%;
-  }
+ .sun:after {
+     font-family: "Font Awesome 5 Free";
+     font-weight: 900;
+     content: "\f185";
+ }
 
-  .moon:after{
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f186";
-  }
+ .moon {
+     background-color: #eee;
+     left: 0;
+     right: 50%;
+ }
+
+ .moon:after {
+     font-family: "Font Awesome 5 Free";
+     font-weight: 900;
+     content: "\f186";
+ }
