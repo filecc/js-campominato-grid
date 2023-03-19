@@ -29,7 +29,8 @@
      align-items: center;
      background: url('../img/grass.png'), linear-gradient(#6491d0, #bbe5f4);
      background-position: bottom;
-     background-size: cover;
+     background-size: contain;
+     background-repeat: repeat-x;
      position: relative;
      transition: all 1s;
  }
@@ -37,7 +38,8 @@
  main.dark {
      background: url('../img/grass.png'), linear-gradient(#021a3c, #053982);
      background-position: bottom;
-     background-size: cover;
+     background-size: contain;
+     background-repeat: repeat-x;
      transition: all 1s;
  }
 
@@ -63,7 +65,6 @@
 
  .moonImg {
      max-height: 150px;
-     margin-left: -150px;
      top: 20px;
      left: 250%;
  }
@@ -90,6 +91,7 @@
      100% {
          left: 250%;
      }
+     
 
  }
 

@@ -2,6 +2,7 @@
 const main = document.querySelector("main");
 const sun = document.querySelector('.sunImg');
 const moon = document.querySelector('.moonImg');
+const switcher = document.getElementById("btnSwitch");
 
 function changeColor() {
   switcher.classList.toggle("sun");
@@ -13,20 +14,19 @@ function changeColor() {
     main.classList.remove("dark");
     sun.classList.remove('takeBack');
     sun.classList.add('moveApart');
-
+    sun.classList.toggle('d-none', true);
+    moon.classList.remove('d-none', true);
   } else {
     main.classList.add("dark");
     moon.classList.remove('takeBack');
     moon.classList.add('moveApart');
+    sun.classList.toggle('d-none', false);
+    moon.classList.add('d-none', true);
   }
   main.classList.toggle("dark");
   document.querySelector(".selectOptions").classList.toggle("light");
   document.querySelector("#gameHeader").classList.toggle("light");
 }
-
-
-
-const switcher = document.getElementById("btnSwitch");
 
 //listen to input in toggle button
 switcher.addEventListener("click", () => {
