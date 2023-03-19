@@ -76,7 +76,8 @@ window.onresize = resizeSquare;
         wrapper.append(createChild("div", `m${i + 1}n${j + 1}`, ["square"], ""));
     }
   }
-  document.querySelector('#gameHeader').append(createChild('button', 'checkWinner', ['btn','btn-warning'], 'Check'));
+  document.querySelector('.btnContainer').append(createChild('button', 'markMode', ['btn', 'btn-outline-warning'], '🚩'));
+  document.querySelector('.btnContainer').append(createChild('button', 'checkWinner', ['btn','btn-warning'], 'Check'));
   // fix the outer square border radius
   document.getElementById(`m1n1`).classList.add('squareTopLeft')
   document.getElementById(`m1n${sqrtSquares}`).classList.add('squareTopRight')
@@ -84,9 +85,11 @@ window.onresize = resizeSquare;
   document.getElementById(`m${sqrtSquares}n1`).classList.add('squareBottomLeft')
   /* get all the squares in the playground */
   const squares = document.querySelectorAll(".square");
-
+  let bombsFound = [];
   /*  create the bombs: ~20% of the total squares -1 */
   let bombs = [];
+  const markBtn = document.getElementById('markMode');
+  let markMode = false;
   while (bombs.length < numOfBombs) {
     const randomCol = getRandomInt(1, sqrtSquares),
     randomRow = getRandomInt(1, sqrtSquares);
@@ -95,8 +98,26 @@ window.onresize = resizeSquare;
     }
   }
 
+  markBtn.addEventListener('click', ()=>{
+    if (markMode === false){
+        markMode = true;
+        markBtn.classList.toggle('btn-outline-warning');
+        markBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+        markBtn.classList.toggle('btn-success');
+    } else{
+        markMode = false;
+        markBtn.classList.toggle('btn-outline-warning');
+        markBtn.textContent = '🚩';
+        markBtn.classList.toggle('btn-success');
+    }
+    console.log(markMode)
+    
+  });
   /*  CHECK IF WE CLICK A BOMB */
   for (let i = 0; i < squares.length; i++) {
+    if (markMode === false) {
+        
+    }
     squares[i].addEventListener("click", () => {
       if (bombs.indexOf(squares[i].id) >= 0) {
         /* END OF THE GAME */
@@ -108,6 +129,7 @@ window.onresize = resizeSquare;
       } else {
         /* YOU'RE SAFE, YOU CAN CONTINUE THE GAME */
         /* GET CLICKED SQUARE POSITION ON THE GRID */
+        
         const clickedPosition = squares[i].id
           .replace(/[^0-9]/g, "-")
           .split("-");
@@ -160,11 +182,15 @@ window.onresize = resizeSquare;
               }
             }
           });
+
+          
           
           if (aroundBombs === 0) {
             document.getElementById(`m${row}n${col}`).classList.add("safe");
             document.getElementById(`m${row}n${col}`).classList.remove("marked");
             document.getElementById(`m${row}n${col}`).innerHTML = ' ';
+            bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+            document.getElementById('bombsToFind').innerHTML = numOfBombs - bombsFound.length;
             // if the square is safe check all the other positions and reveal them until they're 0 too
             safeSpot.forEach((spot) => {
               const newRow = spot[0];
@@ -182,9 +208,10 @@ window.onresize = resizeSquare;
             //other wise stop the checking
             /* const checked = document.getElementById(`m${row}n${col}`); */
             document.getElementById(`m${row}n${col}`).classList.remove("marked");
-            discovered++;
             document.getElementById(`m${row}n${col}`).classList.add("aroundNotSafe");
             document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
+            bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+            document.getElementById('bombsToFind').innerHTML = numOfBombs - bombsFound.length;
           }
         }
 
@@ -193,9 +220,8 @@ window.onresize = resizeSquare;
     });
   }
 
-/* MARK THE BOMB POSITION */
-  let bombsFound = [];
-  let discovered = 0;
+  /* MARK THE BOMB POSITION */
+  
 
   for (let i = 0; i < squares.length; i++) {
    
@@ -203,19 +229,17 @@ window.onresize = resizeSquare;
       "contextmenu",
       (event) => {
         event.preventDefault();
-        
         //add the mark if the square is empty and is not already marked
         if (!squares[i].innerHTML && !squares[i].classList.contains('marked') ){
             squares[i].classList.add('marked');
             bombsFound.push(
               squares[i].id)
             ;
-            discovered++;
+            
             btnCheckDisabled();
         } else {
             squares[i].classList.remove('marked');
             bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
-            discovered--;
             btnCheckDisabled();
         }
         

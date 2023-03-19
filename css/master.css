@@ -41,7 +41,7 @@
   #sun-or-moon{
     width: 90%;
     position: absolute;
-    top: -10%;
+    top: 0;
     left: 0;
     display: flex;
     justify-content: flex-start;
@@ -117,10 +117,21 @@
   }
   #gameHeader{
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    align-items: center;
+    width: calc(var(--wrapper-width) + 10px);
+    gap: 1rem;
+  }
+  .btnContainer{
+    width: 100%;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    width: var(--wrapper-width);
-    margin: 1rem auto;
+  }
+  h2{
+    margin-bottom: 0;
   }
   .light{
     color: white;
