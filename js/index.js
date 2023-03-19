@@ -357,6 +357,7 @@ function theyWin(){
     squares.forEach(square => {
         if (!bombs.includes(square.id)){
             square.className = '';
+            square.innerHTML = '';
             addClasses(square, ['square', 'safe']);
         }
     })
