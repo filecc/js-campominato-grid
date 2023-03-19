@@ -273,6 +273,9 @@ function itsabomb(level) {
           console.log(bombsFound)
         } else {
           squares[i].classList.remove("marked");
+          if(bombsFound.includes(`m${row}n${col}`)){
+            bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+        }
           btnCheckDisabled();
           console.log(bombsFound)
         }
