@@ -33,6 +33,7 @@
      background-repeat: repeat-x;
      position: relative;
      transition: all 1s;
+     overflow: hidden;
  }
 
  main.dark {
@@ -44,10 +45,9 @@
  }
 
  #sun-or-moon {
-     width: 90%;
+     width: 100%;
      position: absolute;
      top: 0;
-     left: 0;
      display: flex;
      justify-content: flex-start;
      z-index: 0;
@@ -295,7 +295,6 @@
     }
 }
 
- /* DARK MODE */
  /* DARK MODE */
  #toggleContainer {
      position: absolute;

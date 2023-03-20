@@ -14,14 +14,20 @@ function changeColor() {
     main.classList.remove("dark");
     sun.classList.remove('takeBack');
     sun.classList.add('moveApart');
-    sun.classList.toggle('d-none', true);
-    moon.classList.remove('d-none', true);
+    setTimeout(() => {
+        sun.classList.toggle('d-none', true);
+        moon.classList.remove('d-none', true);
+    }, 200);
+    
   } else {
     main.classList.add("dark");
     moon.classList.remove('takeBack');
     moon.classList.add('moveApart');
-    sun.classList.toggle('d-none', false);
+    setTimeout(() => {
+        sun.classList.toggle('d-none', false);
     moon.classList.add('d-none', true);
+    }, 200);
+   
   }
   main.classList.toggle("dark");
   document.querySelector(".selectOptions").classList.toggle("light");

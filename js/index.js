@@ -27,10 +27,10 @@ function start() {
   });
 }
 
-start();
-
 function itsabomb(level) {
   let numOfSquares = level;
+   // define a constant we'll use later
+   const sqrtSquares = Math.sqrt(numOfSquares);
   /* fixed the width of the wrapper according to the grid dimensions */
   const property = document.documentElement;
   let squareDimension = 25;
@@ -58,12 +58,12 @@ function itsabomb(level) {
     (numOfSquares === 100 && 16) || Math.floor((numOfSquares / 100) * 20) - 1;
   const bombsToFind = document.getElementById("bombsToFind");
   bombsToFind.innerHTML = numOfBombs;
-  // define a constant we'll use later
-  const sqrtSquares = Math.sqrt(numOfSquares);
+ 
 
   // create the playground
   const wrapper = document.querySelector(".wrapper");
   wrapper.innerHTML = "";
+  
   for (let i = 0; i < sqrtSquares; i++) {
     for (let j = 0; j < sqrtSquares; j++) {
       // every square has a unique ID, corresponding to its position on the grid
@@ -71,8 +71,12 @@ function itsabomb(level) {
     }
   }
   const btnContainer = document.querySelector(".btnContainer");
-  btnContainer.append(createChild("button", "markMode", ["btn", "btn-outline-warning"], "🚩"));
-    btnContainer.append(createChild("button", "checkWinner", ["btn", "btn-warning"], "Check"));
+  btnContainer.append(
+    createChild("button", "markMode", ["btn", "btn-outline-warning"], "🚩")
+  );
+  btnContainer.append(
+    createChild("button", "checkWinner", ["btn", "btn-warning"], "Check")
+  );
   // fix the outer square border radius
   document.getElementById(`m1n1`).classList.add("squareTopLeft");
   document.getElementById(`m1n${sqrtSquares}`).classList.add("squareTopRight");
@@ -98,7 +102,7 @@ function itsabomb(level) {
     }
   }
 
-  // add the possibility to add just the flag 
+  // add the possibility to add just the flag
 
   markBtn.addEventListener("click", () => {
     if (markMode === false) {
@@ -117,142 +121,142 @@ function itsabomb(level) {
 
   for (let i = 0; i < squares.length; i++) {
     squares[i].addEventListener("click", function clickTheSquare() {
-        // check for mobile user if we want to add a flag
-        if(markMode){
-            //add the mark if the square is empty and is not already marked
+      // check for mobile user if we want to add a flag
+      if (markMode) {
+        //add the mark if the square is empty and is not already marked
         if (!squares[i].innerHTML && !squares[i].classList.contains("marked")) {
-            squares[i].classList.add("marked");
-            bombsFound.push(squares[i].id);
-  
-            btnCheckDisabled();
-          } else {
-            squares[i].classList.remove("marked");
-            bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
-            btnCheckDisabled();
-          }
-  
-          // update the remaining bombs according to the user
-          document.getElementById("bombsToFind").innerHTML =
-            numOfBombs - bombsFound.length;
+          squares[i].classList.add("marked");
+          bombsFound.push(squares[i].id);
+
+          btnCheckDisabled();
         } else {
-            if (bombs.indexOf(squares[i].id) >= 0) {
-                /* END OF THE GAME */
-                squares[i].innerHTML = "💣";
-                squares[i].className = '';
-                wrapper.classList.add('position-relative')
-                addClasses(squares[i], ['boom', 'destroy', 'explosion', 'square']);
-                explosion(squares[i]);
-                squares[i].innerHTML += "<br>BOOM";
-                btnContainer.innerHTML = '';
-                btnContainer.style.justifyContent = 'center';
-                btnContainer.append(createChild('a', 'replay', ['btn', 'btn-danger'], 'Replay'));
-                const replay = document.getElementById('replay');
-                replay.setAttribute('href', './index.html');
-                document.querySelector('#gameHeader h2').style.display = 'none';
-                
-              } else {
-                /* YOU'RE SAFE, YOU CAN CONTINUE THE GAME */
-                /* GET CLICKED SQUARE POSITION ON THE GRID */
-        
-                const clickedPosition = squares[i].id
-                  .replace(/[^0-9]/g, "-")
-                  .split("-");
-        
-                const clickedRow = parseInt(clickedPosition[1]),
-                  clickedCol = parseInt(clickedPosition[2]);
-        
-                /* CHECK THE NEIBOROUGH */
-                /* THE GRID TO CHECK FOLLOW THIS PATTERN (example of a grid 3x3)
+          squares[i].classList.remove("marked");
+          bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
+          btnCheckDisabled();
+        }
+
+        // update the remaining bombs according to the user
+        document.getElementById("bombsToFind").innerHTML =
+          numOfBombs - bombsFound.length;
+      } else {
+        if (bombs.indexOf(squares[i].id) >= 0) {
+          /* END OF THE GAME */
+          squares[i].innerHTML = "💣";
+          squares[i].className = "";
+          wrapper.classList.add("position-relative");
+          addClasses(squares[i], ["boom", "destroy", "explosion", "square"]);
+          explosion(squares[i]);
+          squares[i].innerHTML += "<br>BOOM";
+          btnContainer.innerHTML = "";
+          btnContainer.style.justifyContent = "center";
+          btnContainer.append(
+            createChild("a", "replay", ["btn", "btn-danger"], "Replay")
+          );
+          const replay = document.getElementById("replay");
+          replay.setAttribute("href", "./index.html");
+          document.querySelector("#gameHeader h2").style.display = "none";
+        } else {
+          /* YOU'RE SAFE, YOU CAN CONTINUE THE GAME */
+          /* GET CLICKED SQUARE POSITION ON THE GRID */
+
+          const clickedPosition = squares[i].id
+            .replace(/[^0-9]/g, "-")
+            .split("-");
+
+          const clickedRow = parseInt(clickedPosition[1]),
+            clickedCol = parseInt(clickedPosition[2]);
+
+          /* CHECK THE NEIBOROUGH */
+          /* THE GRID TO CHECK FOLLOW THIS PATTERN (example of a grid 3x3)
                                       sq(mX-1, mY-1) sq(mX-1, mY) sq(mX-1, mY+1)
                                       sq(mX, mY-1) *CLICKED(mXnY)* sq(mX, mY+1)
                                       sq(mX+1, mY-1) sq(mX+1, mY) sq(mX+1, mY+1)
                     
                               */
-        
-                // create the positions array
-                const squarePositionToCheck = [
-                  [-1, -1],
-                  [-1, 0],
-                  [-1, 1],
-                  [0, -1],
-                  [0, 1],
-                  [1, -1],
-                  [1, 0],
-                  [1, 1],
-                ];
-        
-                function checkNearby(row, col) {
-                  // if some of the square is a bomb let increase this counter
-                  let aroundBombs = 0;
-                  // an array of safe spots
-                  let safeSpot = [];
-        
-                  // check all the position from the grid
-                  squarePositionToCheck.forEach((position) => {
-                    const newRow = row + position[0];
-                    const newCol = col + position[1];
-        
-                    // ensure that we're not out of row or col
-                    if (
-                      newRow > 0 &&
-                      newCol > 0 &&
-                      newRow <= sqrtSquares &&
-                      newCol <= sqrtSquares
-                    ) {
-                      if (bombs.includes(`m${newRow}n${newCol}`)) {
-                        aroundBombs++;
-                      } else {
-                        safeSpot.push([newRow, newCol]);
-                      }
-                    }
-                  });
-        
-                  if (aroundBombs === 0) {
-                    document.getElementById(`m${row}n${col}`).classList.add("safe");
-                    document
-                      .getElementById(`m${row}n${col}`)
-                      .classList.remove("marked");
-                    document.getElementById(`m${row}n${col}`).innerHTML = " ";
-                    if(bombsFound.includes(`m${row}n${col}`)){
-                        bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
-                    }
-                    document.getElementById("bombsToFind").innerHTML =
-                      numOfBombs - bombsFound.length;
-                    // if the square is safe check all the other positions and reveal them until they're 0 too
-                    safeSpot.forEach((spot) => {
-                      const newRow = spot[0];
-                      const newCol = spot[1];
-                      if (
-                        !document
-                          .getElementById(`m${newRow}n${newCol}`)
-                          .classList.contains("safe")
-                      ) {
-                        // keep searching...
-                        checkNearby(newRow, newCol);
-                      }
-                    });
-                  } else {
-                    //other wise stop the checking
-                    /* const checked = document.getElementById(`m${row}n${col}`); */
-                    document
-                      .getElementById(`m${row}n${col}`)
-                      .classList.remove("marked");
-                    document
-                      .getElementById(`m${row}n${col}`)
-                      .classList.add("aroundNotSafe");
-                    document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
-                    if(bombsFound.includes(`m${row}n${col}`)){
-                        bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
-                    }
-                    document.getElementById("bombsToFind").innerHTML =
-                      numOfBombs - bombsFound.length;
-                  }
+
+          // create the positions array
+          const squarePositionToCheck = [
+            [-1, -1],
+            [-1, 0],
+            [-1, 1],
+            [0, -1],
+            [0, 1],
+            [1, -1],
+            [1, 0],
+            [1, 1],
+          ];
+
+          function checkNearby(row, col) {
+            // if some of the square is a bomb let increase this counter
+            let aroundBombs = 0;
+            // an array of safe spots
+            let safeSpot = [];
+
+            // check all the position from the grid
+            squarePositionToCheck.forEach((position) => {
+              const newRow = row + position[0];
+              const newCol = col + position[1];
+
+              // ensure that we're not out of row or col
+              if (
+                newRow > 0 &&
+                newCol > 0 &&
+                newRow <= sqrtSquares &&
+                newCol <= sqrtSquares
+              ) {
+                if (bombs.includes(`m${newRow}n${newCol}`)) {
+                  aroundBombs++;
+                } else {
+                  safeSpot.push([newRow, newCol]);
                 }
-        
-                checkNearby(clickedRow, clickedCol);
               }
+            });
+
+            if (aroundBombs === 0) {
+              document.getElementById(`m${row}n${col}`).classList.add("safe");
+              document
+                .getElementById(`m${row}n${col}`)
+                .classList.remove("marked");
+              document.getElementById(`m${row}n${col}`).innerHTML = " ";
+              if (bombsFound.includes(`m${row}n${col}`)) {
+                bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+              }
+              document.getElementById("bombsToFind").innerHTML =
+                numOfBombs - bombsFound.length;
+              // if the square is safe check all the other positions and reveal them until they're 0 too
+              safeSpot.forEach((spot) => {
+                const newRow = spot[0];
+                const newCol = spot[1];
+                if (
+                  !document
+                    .getElementById(`m${newRow}n${newCol}`)
+                    .classList.contains("safe")
+                ) {
+                  // keep searching...
+                  checkNearby(newRow, newCol);
+                }
+              });
+            } else {
+              //other wise stop the checking
+              /* const checked = document.getElementById(`m${row}n${col}`); */
+              document
+                .getElementById(`m${row}n${col}`)
+                .classList.remove("marked");
+              document
+                .getElementById(`m${row}n${col}`)
+                .classList.add("aroundNotSafe");
+              document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
+              if (bombsFound.includes(`m${row}n${col}`)) {
+                bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+              }
+              document.getElementById("bombsToFind").innerHTML =
+                numOfBombs - bombsFound.length;
+            }
+          }
+
+          checkNearby(clickedRow, clickedCol);
         }
-      
+      }
     });
   }
 
@@ -270,9 +274,9 @@ function itsabomb(level) {
           btnCheckDisabled();
         } else {
           squares[i].classList.remove("marked");
-          if(bombsFound.includes(squares[i].id)){
+          if (bombsFound.includes(squares[i].id)) {
             bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
-        }
+          }
           btnCheckDisabled();
         }
 
@@ -283,7 +287,6 @@ function itsabomb(level) {
       },
       false
     );
-    
   }
 
   const btnCheck = document.getElementById("checkWinner");
@@ -298,71 +301,68 @@ function itsabomb(level) {
   }
 
   let checkPassed = 0;
-  btnCheck.addEventListener('click', ()=>{
+  btnCheck.addEventListener("click", () => {
     checkPassed = 0;
-    btnCheck.classList.toggle('tryAgain');
+    btnCheck.classList.toggle("tryAgain");
     setTimeout(checkNow, 100);
 
-    function checkNow(){
-        if(numOfBombs === bombsFound.length){
-            for(let i=0;i<bombsFound.length;i++){
-             if(bombs.includes(bombsFound[i])){
-                 checkPassed++;
-             }
-            }
-         }
-         if (checkPassed === numOfBombs){
-             btnCheck.classList.remove('tryAgain');
-             celebrate();
-             theyWin();
-             
-             btnContainer.innerHTML = '';
-                     btnContainer.style.justifyContent = 'center';
-                     btnContainer.append(createChild('a', 'replay', ['btn', 'btn-danger'], 'Replay'));
-                     const replay = document.getElementById('replay');
-                     replay.setAttribute('href', './index.html');
-                     document.querySelector('#gameHeader h2').style.display = 'none';
-     
-     
-         } else {
-             btnCheck.classList.add('tryAgain');
-         }
+    function checkNow() {
+      if (numOfBombs === bombsFound.length) {
+        for (let i = 0; i < bombsFound.length; i++) {
+          if (bombs.includes(bombsFound[i])) {
+            checkPassed++;
+          }
+        }
+      }
+      if (checkPassed === numOfBombs) {
+        btnCheck.classList.remove("tryAgain");
+        celebrate();
+        theyWin();
+
+        btnContainer.innerHTML = "";
+        btnContainer.style.justifyContent = "center";
+        btnContainer.append(
+          createChild("a", "replay", ["btn", "btn-danger"], "Replay")
+        );
+        const replay = document.getElementById("replay");
+        replay.setAttribute("href", "./index.html");
+        document.querySelector("#gameHeader h2").style.display = "none";
+      } else {
+        btnCheck.classList.add("tryAgain");
+      }
     }
-    
-  })
+  });
 
-
-
-  
-function explosion(element) {
-  let id = null;
-  let width = 0;
-  clearInterval(id);
-  id = setInterval(frame, 10);
-  function frame() {
-    if (width == 100) {
-      clearInterval(id);
-    } else {
-      width++;
-      element.style.width = width + "%";
-      element.style.height = width + "%";
+  function explosion(element) {
+    let id = null;
+    let width = 0;
+    clearInterval(id);
+    id = setInterval(frame, 10);
+    function frame() {
+      if (width == 100) {
+        clearInterval(id);
+      } else {
+        width++;
+        element.style.width = width + "%";
+        element.style.height = width + "%";
+      }
     }
+  }
+
+  function theyWin() {
+    bombs.forEach((bomb) => {
+      const toApply = document.getElementById(bomb);
+      toApply.className = "";
+      addClasses(toApply, ["square", "flower"]);
+    });
+    squares.forEach((square) => {
+      if (!bombs.includes(square.id)) {
+        square.className = "";
+        square.innerHTML = "";
+        addClasses(square, ["square", "safe"]);
+      }
+    });
   }
 }
 
-function theyWin(){
-    bombs.forEach(bomb => {
-        const toApply = document.getElementById(bomb);
-        toApply.className='';
-        addClasses(toApply, ['square', 'flower']);
-    });
-    squares.forEach(square => {
-        if (!bombs.includes(square.id)){
-            square.className = '';
-            square.innerHTML = '';
-            addClasses(square, ['square', 'safe']);
-        }
-    })
-    
-}
-}
+start();
