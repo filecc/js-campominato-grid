@@ -24,12 +24,29 @@ function addClasses(element, classes) {
   }
 }
 
+function addClassesMoreElement(elements, [classes]) {
+  elements.forEach(element => {
+    for (const _class of classes) {
+      element.classList.add(_class);
+    }
+  });
+  
+}
+
 /* Remove the specified classes to the given HTML element */
 function removeClasses(element, classes) {
   for (const _class of classes) {
     element.classList.remove(_class);
   }
 }
+
+/* Remove the specified classes to the given HTML element */
+function toggleClasses(element, classes) {
+  for (const _class of classes) {
+    element.classList.toggle(_class);
+  }
+}
+
 
 
 /* Adds the specified ID to the given HTML element */

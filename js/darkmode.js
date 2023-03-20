@@ -5,11 +5,10 @@ const moon = document.querySelector('.moonImg');
 const switcher = document.getElementById("btnSwitch");
 
 function changeColor() {
-  switcher.classList.toggle("sun");
-  switcher.classList.toggle("moon");
-  sun.classList.toggle('takeBack');
-  moon.classList.toggle('takeBack');
-
+  toggleClasses(switcher, ['sun', 'moon']);
+  toggleClasses(sun, ['takeBack']);
+  toggleClasses(moon, ['takeBack']);
+  
   if (switcher.classList.contains("moon")) {
     main.classList.remove("dark");
     sun.classList.remove('takeBack');
@@ -17,7 +16,7 @@ function changeColor() {
     setTimeout(() => {
         sun.classList.toggle('d-none', true);
         moon.classList.remove('d-none', true);
-    }, 200);
+    }, 500);
     
   } else {
     main.classList.add("dark");
@@ -25,8 +24,8 @@ function changeColor() {
     moon.classList.add('moveApart');
     setTimeout(() => {
         sun.classList.toggle('d-none', false);
-    moon.classList.add('d-none', true);
-    }, 200);
+        moon.classList.add('d-none', true);
+    }, 500);
    
   }
   main.classList.toggle("dark");

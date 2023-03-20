@@ -1,57 +1,45 @@
 function start() {
-  const property = document.documentElement;
+  
   document.querySelector(".start").addEventListener("click", () => {
-    let numOfSquares = 25;
-    if (document.querySelector("select").selectedIndex === 1) {
-      numOfSquares = 49;
-    } else if (document.querySelector("select").selectedIndex === 2) {
-      numOfSquares = 100;
-    } else {
-      numOfSquares = 25;
-    }
 
-    property.style.setProperty(
-      "--wrapper-width",
-      `${Math.sqrt(numOfSquares) * 50}px`
-    );
+    let numOfSquares = 25;
+    const levelSelected = document.querySelector("select").selectedIndex;
+    if (levelSelected === 1) {
+      numOfSquares = 49;
+    } else if (levelSelected === 2) {
+      numOfSquares = 100;
+    }
+    const squareRootNum = Math.sqrt(numOfSquares);
+    const property = document.documentElement;
+    property.style.setProperty("--wrapper-width", `${squareRootNum * 50}px` );
+
     if (window.innerWidth < 600 && numOfSquares > 25) {
-      property.style.setProperty(
-        "--wrapper-width",
-        `${Math.sqrt(numOfSquares) * 35}px`
-      );
+      property.style.setProperty("--wrapper-width",`${squareRootNum * 35}px`);
       property.style.setProperty("--square-width", `35px`);
     }
     document.querySelector(".selectOptions").classList.toggle("d-none");
     document.querySelector(".game").classList.toggle("d-none");
-    itsabomb(numOfSquares);
+    itsabomb(numOfSquares, squareRootNum);
   });
 }
 
-function itsabomb(level) {
-  let numOfSquares = level;
+function itsabomb(level, squaredRoot) {
+  let wins = false;
+  const numOfSquares = level;
    // define a constant we'll use later
-   const sqrtSquares = Math.sqrt(numOfSquares);
-  /* fixed the width of the wrapper according to the grid dimensions */
+  const sqrtSquares = squaredRoot;
+
+  /* fix the width of the wrapper according to the grid dimensions */
   const property = document.documentElement;
   let squareDimension = 25;
+
   // check the windows width
   function resizeSquare() {
-    if (window.innerWidth <= 600 && numOfSquares > 25) {
-      squareDimension = 40;
-    } else {
-      squareDimension = 50;
-    }
-    property.style.setProperty(
-      "--wrapper-width",
-      `${sqrtSquares * squareDimension}px`
-    );
+    (window.innerWidth <= 600 && numOfSquares > 25) ? squareDimension = 40 : squareDimension = 50;
+    property.style.setProperty("--wrapper-width",`${sqrtSquares * squareDimension}px`);
     property.style.setProperty("--square-width", `${squareDimension}px`);
   }
-
   window.onresize = resizeSquare;
-
-  // end of width replacemente
-  let win = false;
 
   // if the grid is 10x10 limit the bomb number to 16
   const numOfBombs =
@@ -70,13 +58,13 @@ function itsabomb(level) {
       wrapper.append(createChild("div", `m${i + 1}n${j + 1}`, ["square"], ""));
     }
   }
+
   const btnContainer = document.querySelector(".btnContainer");
-  btnContainer.append(
-    createChild("button", "markMode", ["btn", "btn-outline-warning"], "🚩")
-  );
-  btnContainer.append(
-    createChild("button", "checkWinner", ["btn", "btn-warning"], "Check")
-  );
+  const markBtn = createChild("button", "markMode", ["btn", "btn-outline-warning"], "🚩 Put a flag");
+  const btnCheck = createChild("button", "checkWinner", ["btn", "btn-warning"], "Check");
+  btnContainer.append(markBtn);
+  btnContainer.append(btnCheck);
+
   // fix the outer square border radius
   document.getElementById(`m1n1`).classList.add("squareTopLeft");
   document.getElementById(`m1n${sqrtSquares}`).classList.add("squareTopRight");
@@ -86,12 +74,13 @@ function itsabomb(level) {
   document
     .getElementById(`m${sqrtSquares}n1`)
     .classList.add("squareBottomLeft");
+
   /* get all the squares in the playground */
   const squares = document.querySelectorAll(".square");
   let bombsFound = [];
+
   /*  create the bombs: ~20% of the total squares -1 */
   let bombs = [];
-  const markBtn = document.getElementById("markMode");
   let markMode = false;
 
   while (bombs.length < numOfBombs) {
@@ -103,22 +92,21 @@ function itsabomb(level) {
   }
 
   // add the possibility to add just the flag
-
   markBtn.addEventListener("click", () => {
     if (markMode === false) {
       markMode = true;
-      markBtn.classList.toggle("btn-outline-warning");
-      markBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
-      markBtn.classList.toggle("btn-success");
+      toggleClasses(markBtn, ["btn-outline-warning", "btn-success"]);
+      const iconCheck = createChild('i', '', ['fa-solid', 'fa-check'], '');
+      markBtn.textContent = '';
+      markBtn.append(iconCheck);
     } else {
       markMode = false;
-      markBtn.classList.toggle("btn-outline-warning");
-      markBtn.textContent = "🚩";
-      markBtn.classList.toggle("btn-success");
+      toggleClasses(markBtn, ["btn-outline-warning", "btn-success"]);
+      markBtn.textContent = "🚩 Put a flag";
     }
   });
-  /*  CHECK IF WE CLICK A BOMB */
 
+  /*  CHECK IF WE CLICK A BOMB */
   for (let i = 0; i < squares.length; i++) {
     squares[i].addEventListener("click", function clickTheSquare() {
       // check for mobile user if we want to add a flag
@@ -127,34 +115,30 @@ function itsabomb(level) {
         if (!squares[i].innerHTML && !squares[i].classList.contains("marked")) {
           squares[i].classList.add("marked");
           bombsFound.push(squares[i].id);
-
           btnCheckDisabled();
         } else {
           squares[i].classList.remove("marked");
           bombsFound.splice(bombsFound.indexOf(squares[i].id), 1);
           btnCheckDisabled();
         }
-
         // update the remaining bombs according to the user
-        document.getElementById("bombsToFind").innerHTML =
-          numOfBombs - bombsFound.length;
+        document.getElementById("bombsToFind").textContent = numOfBombs - bombsFound.length;
       } else {
         if (bombs.indexOf(squares[i].id) >= 0) {
           /* END OF THE GAME */
-          squares[i].innerHTML = "💣";
+          squares[i].textContent = "💣";
           squares[i].className = "";
           wrapper.classList.add("position-relative");
           addClasses(squares[i], ["boom", "destroy", "explosion", "square"]);
           explosion(squares[i]);
           squares[i].innerHTML += "<br>BOOM";
-          btnContainer.innerHTML = "";
+          btnContainer.textContent = "";
           btnContainer.style.justifyContent = "center";
-          btnContainer.append(
-            createChild("a", "replay", ["btn", "btn-danger"], "Replay")
-          );
-          const replay = document.getElementById("replay");
+          const replay =  createChild("a", "replay", ["btn", "btn-danger"], "Replay");
+          btnContainer.append(replay);
           replay.setAttribute("href", "./index.html");
           document.querySelector("#gameHeader h2").style.display = "none";
+          squares[i].removeEventListener('click', clickTheSquare, false);
         } else {
           /* YOU'RE SAFE, YOU CAN CONTINUE THE GAME */
           /* GET CLICKED SQUARE POSITION ON THE GRID */
@@ -196,7 +180,6 @@ function itsabomb(level) {
             squarePositionToCheck.forEach((position) => {
               const newRow = row + position[0];
               const newCol = col + position[1];
-
               // ensure that we're not out of row or col
               if (
                 newRow > 0 &&
@@ -213,15 +196,15 @@ function itsabomb(level) {
             });
 
             if (aroundBombs === 0) {
-              document.getElementById(`m${row}n${col}`).classList.add("safe");
-              document
-                .getElementById(`m${row}n${col}`)
-                .classList.remove("marked");
-              document.getElementById(`m${row}n${col}`).innerHTML = " ";
-              if (bombsFound.includes(`m${row}n${col}`)) {
-                bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+              const idPosition = document.getElementById(`m${row}n${col}`);
+              idPosition.classList.add("safe");
+              idPosition.classList.remove("marked");
+              idPosition.textContent = " ";
+              idPosition.removeEventListener('click', clickTheSquare, false);
+              if (bombsFound.includes(idPosition.id)) {
+                bombsFound.splice(bombsFound.indexOf(idPosition.id), 1);
               }
-              document.getElementById("bombsToFind").innerHTML =
+              document.getElementById("bombsToFind").textContent =
                 numOfBombs - bombsFound.length;
               // if the square is safe check all the other positions and reveal them until they're 0 too
               safeSpot.forEach((spot) => {
@@ -237,19 +220,18 @@ function itsabomb(level) {
                 }
               });
             } else {
-              //other wise stop the checking
-              /* const checked = document.getElementById(`m${row}n${col}`); */
-              document
-                .getElementById(`m${row}n${col}`)
-                .classList.remove("marked");
-              document
-                .getElementById(`m${row}n${col}`)
-                .classList.add("aroundNotSafe");
-              document.getElementById(`m${row}n${col}`).innerHTML = aroundBombs;
-              if (bombsFound.includes(`m${row}n${col}`)) {
-                bombsFound.splice(bombsFound.indexOf(`m${row}n${col}`), 1);
+              //otherwise stop the checking
+              const checked = document.getElementById(`m${row}n${col}`);
+              checked.classList.remove("marked");
+              if (!checked.classList.contains('safe')){
+                checked.classList.add("aroundNotSafe");
+                checked.textContent = aroundBombs;
               }
-              document.getElementById("bombsToFind").innerHTML =
+              checked.removeEventListener('click', clickTheSquare);
+              if (bombsFound.includes(checked.id)) {
+                bombsFound.splice(bombsFound.indexOf(checked.id), 1);
+              }
+              document.getElementById("bombsToFind").textContent =
                 numOfBombs - bombsFound.length;
             }
           }
@@ -263,12 +245,11 @@ function itsabomb(level) {
   /* MARK THE BOMB POSITION */
 
   for (let i = 0; i < squares.length; i++) {
-    squares[i].addEventListener(
-      "contextmenu",
-      (event) => {
-        event.preventDefault();
+    squares[i].addEventListener("contextmenu", function handleMark(e) {
+        
+        e.preventDefault();
         //add the mark if the square is empty and is not already marked
-        if (!squares[i].innerHTML && !squares[i].classList.contains("marked")) {
+        if (!squares[i].innerHTML && !squares[i].classList.contains("marked") && !squares[i].classList.contains("safe")) {
           squares[i].classList.add("marked");
           bombsFound.push(squares[i].id);
           btnCheckDisabled();
@@ -289,7 +270,7 @@ function itsabomb(level) {
     );
   }
 
-  const btnCheck = document.getElementById("checkWinner");
+  
   btnCheck.disabled = true;
   /* update the state of the button for check if the user wins or not, after guessing at least the same amount of bombs */
   function btnCheckDisabled() {
@@ -318,6 +299,7 @@ function itsabomb(level) {
         btnCheck.classList.remove("tryAgain");
         celebrate();
         theyWin();
+        wins = true;
 
         btnContainer.innerHTML = "";
         btnContainer.style.justifyContent = "center";
@@ -358,11 +340,12 @@ function itsabomb(level) {
     squares.forEach((square) => {
       if (!bombs.includes(square.id)) {
         square.className = "";
-        square.innerHTML = "";
+        square.textContent = "";
         addClasses(square, ["square", "safe"]);
       }
     });
   }
+  console.log(bombs)
 }
 
 start();

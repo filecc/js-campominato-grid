@@ -29,7 +29,7 @@
      align-items: center;
      background: url('../img/grass.png'), linear-gradient(#6491d0, #bbe5f4);
      background-position: bottom;
-     background-size: contain;
+     background-size: 110%;
      background-repeat: repeat-x;
      position: relative;
      transition: all 1s;
@@ -39,7 +39,7 @@
  main.dark {
      background: url('../img/grass.png'), linear-gradient(#021a3c, #053982);
      background-position: bottom;
-     background-size: contain;
+     background-size: 110%;
      background-repeat: repeat-x;
      transition: all 1s;
  }
@@ -71,14 +71,14 @@
 
  .moveApart {
      animation-name: nightSwitcher;
-     animation-duration: 1s;
+     animation-duration: 1.5s;
      animation-iteration-count: 1;
      animation-fill-mode: forwards;
  }
 
  .takeBack {
      animation-name: takeBack;
-     animation-duration: 1s;
+     animation-duration: 1.5s;
      animation-iteration-count: 1;
      animation-fill-mode: forwards;
  }
@@ -122,11 +122,11 @@
          top: 3px;
          left: -3%;
      }
-
-     main {
-         background-size: contain;
-         background-repeat: no-repeat;
+     main, main.dark{
+        background-size: 200%;
      }
+
+     
  }
 
  #gameHeader {
@@ -185,19 +185,19 @@
  }
 
  .squareTopLeft {
-     border-top-left-radius: 5px;
+     border-top-left-radius: 8px;
  }
 
  .squareTopRight {
-     border-top-right-radius: 5px;
+     border-top-right-radius: 8px;
  }
 
  .squareBottomRight {
-     border-bottom-right-radius: 5px;
+     border-bottom-right-radius: 8px;
  }
 
  .squareBottomLeft {
-     border-bottom-left-radius: 5px;
+     border-bottom-left-radius: 8px;
  }
 
 
